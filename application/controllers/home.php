@@ -7,10 +7,10 @@ class Home extends CI_Controller {
         $this->load->helper("url");
         $this->load->helper("text");
     }
-  
+
     public function index(){
-	    $this->load->model("Model_list");
-	    $config['total_rows'] = $this->Model_list->count_table_data();
+	    $this->load->model("Model_data_post");
+	    $config['total_rows'] = $this->Model_data_post->count_table_data();
         $config['base_url'] = base_url()."home/index";
         $config['per_page'] = 3;
         $config['full_tag_open'] = "<ul class='pagination'>";
@@ -29,7 +29,7 @@ class Home extends CI_Controller {
 		$config['last_tagl_close'] = "</li>";
         $start=$this->uri->segment(3);
         $this->load->library('pagination', $config);
-        $data['data']= $this->Model_list->listdata($config['per_page'],$start);
+        $data['data']= $this->Model_data_post->listdata($config['per_page'],$start);
         $data['subview'] = 'test';
         $this->load->view("main", $data);
 			
@@ -66,24 +66,24 @@ class Home extends CI_Controller {
         }
     }
     public function delete() {
-        $this->load->model('Model_list');
+        $this->load->model('Model_data_post');
         $id = $this->input->get('id');
-        if($this->Model_list->delete($id)){
+        if($this->Model_data_post->delete($id)){
             redirect(base_url() . "home");
         }
         
     }
     public function edit(){
-        $this->load->model('Model_list');
+        $this->load->model('Model_data_post');
         $id = $this->input->get('id');
-        $data['dl']=$this->Model_list->getById($id);
+        $data['dl']=$this->Model_data_post->getById($id);
         $this->load->view("admin/update", $data);
         if ($this->input->post("ok")) {
             $data_update = array(
                 "tit" => $this->input->post("username"),
                 "con" => $this->input->post("pass"),  
             );
-            $this->Model_list->update($data_update, $this->input->post("stt"));
+            $this->Model_data_post->update($data_update, $this->input->post("stt"));
             redirect(base_url() . "home");
         }
     }
@@ -117,13 +117,13 @@ class Home extends CI_Controller {
         $this->load->view('admin/insert');
         if ($this->input->post("ok")) {
             
-        $this->load->model("Model_list");
+        $this->load->model("Model_data_post");
          $data_insert = array(
                "tit" => $this->input->post("username"),
                "con" => $this->input->post("pass"),
                "img" => $check['file_name'],
         );
-        $this->Model_list->insert($data_insert);
+        $this->Model_data_post->insert($data_insert);
            
         redirect(base_url() . "home");
         }
